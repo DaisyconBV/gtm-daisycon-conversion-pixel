@@ -205,14 +205,14 @@ const sendPixel = require('sendPixel');
 const encodeUriComponent = require('encodeUriComponent');
 
 var url = 'https://www.' + data.matchingDomain + '/t/?';
-url += 'si=' + data.campaignId;
-url += '&ti=' + data.transactionId;
+url += 'si=' + encodeUriComponent(data.campaignId);
+url += '&ti=' + encodeUriComponent(data.transactionId);
 url += '&oa=' + encodeUriComponent(data.descriptionAffiliate);
 url += '&om=' + encodeUriComponent(data.descriptionAdvertiser);
-url += '&bd=' + data.orderAmount;
-url += '&rv=' + data.orderAmount;
+url += '&bd=' + encodeUriComponent(data.orderAmount);
+url += '&rv=' + encodeUriComponent(data.orderAmount);
 url += '&ai=' + encodeUriComponent(data.actionId);
-url += '&cur=' + data.currencyCode;
+url += '&cur=' + encodeUriComponent(data.currencyCode);
 
 sendPixel(url, data.gtmOnSuccess, data.gtmOnFailure);
 
