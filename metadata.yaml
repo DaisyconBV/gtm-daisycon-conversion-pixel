@@ -1,5 +1,5 @@
 homepage: "www.daisycon.com",
 documentation: "https://faq-advertiser.daisycon.com/hc/en-us/articles/360019494034-Explanation-Implement-Daisycon-conversion-pixel-in-Google-Tag-Manager",
 versions:  
-	- sha: e2beacc8eb98eb42bc8bc7d0d66f68ee15f8be62
-	changeNotes: Initial release
+  - sha: e2beacc8eb98eb42bc8bc7d0d66f68ee15f8be62
+  changeNotes: Initial release
