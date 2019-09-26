@@ -1,8 +1,16 @@
-﻿___INFO___
+___TERMS_OF_SERVICE___
+
+By creating or modifying this file you agree to Google Tag Manager's Community
+Template Gallery Developer Terms of Service available at
+https://developers.google.com/tag-manager/gallery-tos (or such other URL as
+Google may provide), as modified from time to time.
+
+___INFO___
 
 {
   "displayName": "Daisycon Conversion Pixel",
   "description": "Add the Daisycon Conversion Pixel to the Thank You / Order Confirmation page of your website. The Conversion Pixel has to be added to instruct the Daisycon system that a conversion has taken place.",
+  "categories": ["AFFILIATE_MARKETING", "CONVERSION_TRACKING"],
   "securityGroups": [],
   "id": "cvt_temp_public_id",
   "type": "TAG",
