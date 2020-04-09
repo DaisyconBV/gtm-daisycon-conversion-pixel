@@ -2,11 +2,13 @@ homepage: "https://www.daisycon.com"
 documentation: "https://faq-advertiser.daisycon.com/hc/en-us/articles/360019494034-Explanation-Implement-Daisycon-conversion-pixel-in-Google-Tag-Manager"
 versions:
   # Latest version
+  - sha: 102164387c6bb76b5a42eb17b4dd7f0b020ea5ec
+    changeNotes: Major update to resolve issue with number to string conversion
+  # Older versions
   - sha: 77eeb36301a6cd12f0e40b14549a933df69d52f1
     changeNotes: |2
       New variable names.
       Debugging information when variables are undefined
       Small improvements.
-  # Older versions
   - sha: 41c637032d712352306819921ac4f708004afaf4
     changeNotes: Initial Version
