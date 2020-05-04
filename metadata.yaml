@@ -2,9 +2,11 @@ homepage: "https://www.daisycon.com"
 documentation: "https://faq-advertiser.daisycon.com/hc/en-us/articles/360019494034-Explanation-Implement-Daisycon-conversion-pixel-in-Google-Tag-Manager"
 versions:
   # Latest version
+  - sha: ab389e7775e9f7af918609c00f491a092a9a9413
+    changeNotes: Latest version including all updates
+  # Older versions
   - sha: b918f66a9b7300b5f51609e220e580328ace2fc7
     changeNotes: New matching domain added and added several improvements to code.
-  # Older versions
   - sha: 77eeb36301a6cd12f0e40b14549a933df69d52f1
     changeNotes: |2
       New variable names.
