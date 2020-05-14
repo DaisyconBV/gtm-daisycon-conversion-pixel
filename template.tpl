@@ -163,84 +163,6 @@ ___TEMPLATE_PARAMETERS___
 ]
 
 
-___SANDBOXED_JS_FOR_WEB_TEMPLATE___
-
-// Include required libraries
-const sendPixel = require('sendPixel');
-const getType = require('getType');
-const encodeUri = require('encodeUri');
-const encodeUriComponent = require('encodeUriComponent');
-const log = require('logToConsole');
-
-// List of parameters to add to URL
-const matchingDomain = data.matchingDomain;
-const campaignId = data.campaignId;
-const transactionId = data.transactionId;
-const descriptionAffiliate = data.descriptionAffiliate;
-const descriptionAdvertiser = data.descriptionAdvertiser;
-const orderAmount = data.orderAmount;
-const actionId = data.actionId;
-const promotionCode = data.promotionCode;
-const currencyCode = data.currencyCode;
-
-// Base URL
-let url = encodeUri('https://www.' + matchingDomain.toString() + '/t/?');
-
-url += 'ci=' + encodeUriComponent(campaignId.toString());
-
-if (getType(transactionId) !== 'undefined') {
-  url += '&ti=' + encodeUriComponent(transactionId.toString());
-}
-else {
-  log('GTM: &ti= is undefined');
-}
-
-if (getType(descriptionAffiliate) !== 'undefined') {
-  url += '&pn=' + encodeUriComponent(descriptionAffiliate.toString());
-}
-else {
-  log('GTM: &pn= is undefined');
-}
-
-if (getType(descriptionAdvertiser) !== 'undefined') {
-  url += '&iv=' + encodeUriComponent(descriptionAdvertiser.toString());
-}
-else {
-  log('GTM: &iv= is undefined');
-}
-
-if (getType(orderAmount) !== 'undefined') {
-  url += '&a=' + encodeUriComponent(orderAmount.toString());
-    url += '&r=' + encodeUriComponent(orderAmount.toString());
-}
-else {
-  log('GTM: &r= + &a= is undefined');
-}
-
-if (getType(actionId) !== 'undefined') {
-  url += '&cc=' + encodeUriComponent(actionId.toString());
-}
-else {
-  log('GTM: &cc= is undefined');
-}
-
-if (getType(promotionCode) !== 'undefined') {
-  url += '&pr=' + encodeUriComponent(promotionCode.toString());
-}
-else {
-  log('GTM: &pr= is undefined');
-}
-
-if (getType(currencyCode) !== 'undefined') {
-  url += '&cur=' + encodeUriComponent(currencyCode.toString());
-}
-else {
-  log('GTM: &cur= is undefined');
-}
-
-sendPixel(url, data.gtmOnSuccess, data.gtmOnFailure);
-
-
 ___WEB_PERMISSIONS___
 
 [
@@ -323,37 +245,71 @@ ___WEB_PERMISSIONS___
 ]
 
 
-___TESTS___
+___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
-scenarios:
-- name: Basic encoding test
-  code: |-
-    var triggerUrl;
+const sendPixel = require('sendPixel');
+const getType = require('getType');
+const encodeUri = require('encodeUri');
+const encodeUriComponent = require('encodeUriComponent');
+const log = require('logToConsole');
 
-    mock('sendPixel', function(url, onSuccess, onFailure) {
-      triggerUrl = url;
-      if (onSuccess != null) {
-        onSuccess();
-      }
-    });
+let url = encodeUri('https://www.' + data.matchingDomain.toString() + '/t/?');
 
-    runCode({
-      matchingDomain: 'lt45.net',
-      campaignId: 123456,
-      transactionId: 'ORD1234567890',
-      descriptionAffiliate: 'Description Affiliate',
-      descriptionAdvertiser: 'Description Advertiser',
-      orderAmount: '1.23',
-      actionId: 'categoryX',
-      promotionCode: 'discount20',
-      currencyCode: 'EUR'
-    });
+url += 'ci=' + encodeUriComponent(data.campaignId.toString());
 
-    assertApi('gtmOnSuccess').wasCalled();
-    assertApi('sendPixel').wasCalled();
-    assertThat(triggerUrl).isEqualTo('https://www.lt45.net/t/?ci=123456&ti=ORD1234567890&pn=Description%20Affiliate&iv=Description%20Advertiser&a=1.23&r=1.23&cc=categoryX&pr=discount20&cur=EUR');
+if (getType(data.transactionId) !== 'undefined') {
+	url += '&ti=' + encodeUriComponent(data.transactionId.toString());
+}
+else {
+	log('GTM: &ti= is undefined');
+}
+
+if (getType(data.descriptionAffiliate) !== 'undefined') {
+	url += '&pn=' + encodeUriComponent(data.descriptionAffiliate.toString());
+}
+else {
+	log('GTM: &pn= is undefined');
+}
+
+if (getType(data.descriptionAdvertiser) !== 'undefined') {
+	url += '&iv=' + encodeUriComponent(data.descriptionAdvertiser.toString());
+}
+else {
+	log('GTM: &iv= is undefined');
+}
+
+if (getType(data.orderAmount) !== 'undefined') {
+	url += '&a=' + encodeUriComponent(data.orderAmount.toString());
+    url += '&r=' + encodeUriComponent(data.orderAmount.toString());
+}
+else {
+	log('GTM: &r= + &a= is undefined');
+}
+
+if (getType(data.actionId) !== 'undefined') {
+	url += '&cc=' + encodeUriComponent(data.actionId.toString());
+}
+else {
+	log('GTM: &cc= is undefined');
+}
+
+if (getType(data.promotionCode) !== 'undefined') {
+	url += '&pr=' + encodeUriComponent(data.promotionCode.toString());
+}
+else {
+	log('GTM: &pr= is undefined');
+}
+
+if (getType(data.currencyCode) !== 'undefined') {
+	url += '&cur=' + encodeUriComponent(data.currencyCode.toString());
+}
+else {
+	log('GTM: &cur= is undefined');
+}
+
+sendPixel(url, data.gtmOnSuccess, data.gtmOnFailure);
 
 
 ___NOTES___
 
-Created on 02/08/2019, 11:22:12
+Created on 14/05/2020, 11:22:12
