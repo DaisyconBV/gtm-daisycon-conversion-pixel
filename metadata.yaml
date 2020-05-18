@@ -2,7 +2,7 @@ homepage: "https://www.daisycon.com"
 documentation: "https://faq-advertiser.daisycon.com/hc/en-us/articles/360019494034-Explanation-Implement-Daisycon-conversion-pixel-in-Google-Tag-Manager"
 versions:
   # Latest version
-  - sha: deac8340bffdc55ae8840f954fd7aeae7492f2da
+  - sha: 00759d307db9ed52fdf8b60ca16b4267596562e6
     changeNotes: New matching domain added and added several improvements to code.
   - sha: 77eeb36301a6cd12f0e40b14549a933df69d52f1
     changeNotes: |2
