@@ -196,7 +196,7 @@ ___WEB_PERMISSIONS___
               },
               {
                 "type": 1,
-                "string": "https://www.fr135.net*"
+                "string": "https://www.fr135.net/*"
               },
               {
                 "type": 1,
