@@ -2,6 +2,8 @@ homepage: "https://www.daisycon.com"
 documentation: "https://faq-advertiser.daisycon.com/hc/en-us/articles/360019494034-Explanation-Implement-Daisycon-conversion-pixel-in-Google-Tag-Manager"
 versions:
   # Latest version
+  - sha: c0c3690e8622ba62632b4732f70389c9f24f756a
+    changeNotes: Change label Action ID to Compensation Code
   - sha: 00759d307db9ed52fdf8b60ca16b4267596562e6
     changeNotes: New matching domain added and added several improvements to code.
   - sha: 77eeb36301a6cd12f0e40b14549a933df69d52f1
