@@ -155,7 +155,7 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "TEXT",
     "name": "actionId",
-    "displayName": "Action ID",
+    "displayName": "Compensation Code",
     "simpleValueType": true,
     "help": "If specific compensation groups have been set, insert it here.",
     "canBeEmptyString": true
