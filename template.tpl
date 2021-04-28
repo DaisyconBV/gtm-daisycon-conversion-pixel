@@ -60,6 +60,10 @@ ___TEMPLATE_PARAMETERS___
         "displayValue": "fr135.net"
       },
       {
+        "value": "jf79.net",
+        "displayValue": "jf79.net"
+      },
+      {
         "value": "hs82.net",
         "displayValue": "hs82.net"
       },
@@ -117,6 +121,14 @@ ___TEMPLATE_PARAMETERS___
         "type": "NON_EMPTY"
       }
     ],
+    "canBeEmptyString": true
+  },
+  {
+    "type": "TEXT",
+    "name": "orderRevenue",
+    "displayName": "Order Revenue",
+    "simpleValueType": true,
+    "help": "Total revenue of the order.",
     "canBeEmptyString": true
   },
   {
@@ -202,6 +214,10 @@ ___WEB_PERMISSIONS___
                 "type": 1,
                 "string": "https://www.hs82.net/*"
               },
+	      {
+                "type": 1,
+                "string": "https://www.jf79.net/*"
+              },
               {
                 "type": 1,
                 "string": "https://www.lt45.net/*"
@@ -280,10 +296,16 @@ else {
 
 if (getType(data.orderAmount) !== 'undefined') {
 	url += '&a=' + encodeUriComponent(data.orderAmount.toString());
-    url += '&r=' + encodeUriComponent(data.orderAmount.toString());
 }
 else {
-	log('GTM: &r= + &a= is undefined');
+	log('GTM: &a= is undefined');
+}
+
+if (getType(data.orderRevenue) !== 'undefined') {
+    url += '&r=' + encodeUriComponent(data.orderRevenue.toString());
+}
+else {
+	log('GTM: &r= is undefined');
 }
 
 if (getType(data.actionId) !== 'undefined') {
