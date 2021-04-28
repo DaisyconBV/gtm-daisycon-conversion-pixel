@@ -214,7 +214,7 @@ ___WEB_PERMISSIONS___
                 "type": 1,
                 "string": "https://www.hs82.net/*"
               },
-	      {
+              {
                 "type": 1,
                 "string": "https://www.jf79.net/*"
               },
