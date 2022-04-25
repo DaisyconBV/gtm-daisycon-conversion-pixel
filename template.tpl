@@ -44,6 +44,10 @@ ___TEMPLATE_PARAMETERS___
         "displayValue": "at19.net"
       },
       {
+        "value": "bdt9.net",
+        "displayValue": "bdt9.net"
+      },
+      {
         "value": "ds1.nl",
         "displayValue": "ds1.nl"
       },
@@ -58,6 +62,14 @@ ___TEMPLATE_PARAMETERS___
       {
         "value": "fr135.net",
         "displayValue": "fr135.net"
+      },
+      {
+        "value": "glp8.net",
+        "displayValue": "glp8.net"
+      },
+      {
+        "value": "jdt8.net",
+        "displayValue": "jdt8.net"
       },
       {
         "value": "jf79.net",
@@ -78,6 +90,10 @@ ___TEMPLATE_PARAMETERS___
       {
         "value": "ndt5.net",
         "displayValue": "ndt5.net"
+      },
+      {
+        "value": "rkn3.net",
+        "displayValue": "rkn3.net"
       }
     ],
     "simpleValueType": true,
@@ -192,11 +208,15 @@ ___WEB_PERMISSIONS___
             "listItem": [
               {
                 "type": 1,
-                "string": "https://www.ds1.nl/*"
+                "string": "https://www.at19.net/*"
               },
               {
                 "type": 1,
-                "string": "https://www.at19.net/*"
+                "string": "https://www.bdt9.net/*"
+              },
+	      {
+                "type": 1,
+                "string": "https://www.ds1.nl/*"
               },
               {
                 "type": 1,
@@ -212,11 +232,19 @@ ___WEB_PERMISSIONS___
               },
               {
                 "type": 1,
+                "string": "https://www.glp8.net/*"
+              },
+              {
+                "type": 1,
                 "string": "https://www.hs82.net/*"
               },
               {
                 "type": 1,
                 "string": "https://www.jf79.net/*"
+              },
+              {
+                "type": 1,
+                "string": "https://www.jdt8.net/*"
               },
               {
                 "type": 1,
@@ -229,6 +257,10 @@ ___WEB_PERMISSIONS___
               {
                 "type": 1,
                 "string": "https://www.ndt5.net/*"
+              },
+              {
+                "type": 1,
+                "string": "https://www.rkn3.net/*"
               }
             ]
           }
