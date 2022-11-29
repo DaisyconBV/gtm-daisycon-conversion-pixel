@@ -361,6 +361,8 @@ else {
 	log('GTM: &cur= is undefined');
 }
 
+url += '&src=gtm1.0';
+
 sendPixel(url, data.gtmOnSuccess, data.gtmOnFailure);
 
 
