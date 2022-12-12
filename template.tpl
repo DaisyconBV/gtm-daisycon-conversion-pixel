@@ -9,8 +9,8 @@ Google may provide), as modified from time to time.
 ___INFO___
 
 {
-  "displayName": "Daisycon Conversion Pixel",
-  "description": "Add the Daisycon Conversion Pixel to the Thank You / Order Confirmation page of your website. The Conversion Pixel has to be added to instruct the Daisycon system that a conversion has taken place.",
+  "displayName": "Daisycon Conversion Tag",
+  "description": "Add the Daisycon Conversion Tag to the Thank You / Order Confirmation page of your website. The Conversion Tag has to be added to instruct the Daisycon system that a conversion has taken place.",
   "categories": [
     "AFFILIATE_MARKETING",
     "CONVERSION_TRACKING"
@@ -361,7 +361,7 @@ else {
 	log('GTM: &cur= is undefined');
 }
 
-url += '&src=gtm1.0';
+url += '&src=' + encodeUriComponent('gtm-conversion|1.0');
 
 sendPixel(url, data.gtmOnSuccess, data.gtmOnFailure);
 
