@@ -2,6 +2,12 @@ homepage: "https://www.daisycon.com"
 documentation: "https://faq-advertiser.daisycon.com/hc/en-us/articles/360019494034-Explanation-Implement-Daisycon-conversion-pixel-in-Google-Tag-Manager"
 versions:
   # Latest version
+  - sha: e39b5a68307eb5310e3f68e5d62a5f6439f2a9b9
+    changeNotes: |2
+      Added extra tracking fields.
+      Updated template.
+      Updated template field order.
+      Added unit tests.
   - sha: 5e7db3e84cfeb7a221c10e760908176258c26c3b
     changeNotes: Update src parameter and template name
   - sha: b51ab2db1978de138d1b1cc7ceaffd332d437566
