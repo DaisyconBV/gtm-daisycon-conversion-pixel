@@ -1,4 +1,4 @@
-___TERMS_OF_SERVICE___
+﻿___TERMS_OF_SERVICE___
 
 By creating or modifying this file you agree to Google Tag Manager's Community
 Template Gallery Developer Terms of Service available at
@@ -98,7 +98,7 @@ ___TEMPLATE_PARAMETERS___
     ],
     "simpleValueType": true,
     "alwaysInSummary": true,
-    "help": "Insert the matching domain here. You can ask your contact at Daisycon for more information."
+    "help": "Select the matching domain. You can ask your contact at Daisycon for more information."
   },
   {
     "type": "TEXT",
@@ -111,84 +111,250 @@ ___TEMPLATE_PARAMETERS___
       }
     ],
     "notSetText": "Campaign ID is required!",
-    "help": "Insert your unique campaign ID at Daisycon. You can ask your contact at Daisycon for more information."
+    "help": "Your unique campaign ID at Daisycon. You can ask your contact at Daisycon for more information.",
+    "valueHint": "12345"
   },
   {
-    "type": "TEXT",
+    "type": "SELECT",
     "name": "transactionId",
     "displayName": "Transaction ID",
+    "macrosInSelect": true,
+    "selectItems": [],
     "simpleValueType": true,
-    "help": "Unique reference for the sale (e.g. order- or booking number), maximum 50 characters.",
     "valueValidators": [
       {
         "type": "NON_EMPTY"
       }
     ],
-    "canBeEmptyString": false
+    "help": "Unique reference for the sale (e.g. order- or booking number), maximum 50 characters."
   },
   {
-    "type": "TEXT",
+    "type": "SELECT",
     "name": "orderAmount",
-    "displayName": "Order Amount",
+    "displayName": "Order amount",
+    "macrosInSelect": true,
+    "selectItems": [],
     "simpleValueType": true,
-    "help": "Total value of the order / basket without any delivery costs or discount.",
-    "valueValidators": [
-      {
-        "type": "NON_EMPTY"
-      }
-    ],
-    "canBeEmptyString": true
+    "help": "Total value of the order / basket without any delivery costs or discount."
   },
   {
-    "type": "TEXT",
+    "type": "SELECT",
     "name": "orderRevenue",
-    "displayName": "Order Revenue",
+    "displayName": "Order revenue",
+    "macrosInSelect": true,
+    "selectItems": [],
     "simpleValueType": true,
-    "help": "Total revenue of the order.",
-    "canBeEmptyString": true
+    "help": "Total revenue of the order."
   },
   {
-    "type": "TEXT",
-    "name": "descriptionAffiliate",
-    "displayName": "Description Affiliate",
+    "type": "SELECT",
+    "name": "currencyCode",
+    "displayName": "Currency code",
+    "macrosInSelect": true,
+    "selectItems": [],
     "simpleValueType": true,
-    "help": "Information or description about the order, for the affiliate.",
-    "canBeEmptyString": true
+    "notSetText": "N/A",
+    "help": "Multicurrency support. If not set, the default currency of the campaign is used. Please use the ISO 4217 abbreviation (e.g. EUR)"
   },
   {
-    "type": "TEXT",
-    "name": "descriptionAdvertiser",
-    "displayName": "Description Advertiser",
+    "type": "SELECT",
+    "name": "commissionCode",
+    "displayName": "Commission code",
+    "macrosInSelect": true,
+    "selectItems": [],
     "simpleValueType": true,
-    "help": "Information or description about the order, for the advertiser. This is not visible to affiliates.",
-    "canBeEmptyString": true
+    "help": "The commission code as defined in the compensation groups that have been set at Daisycon.",
+    "notSetText": "N/A"
   },
   {
-    "type": "TEXT",
+    "type": "SELECT",
     "name": "promotionCode",
     "displayName": "Promotion code",
+    "macrosInSelect": true,
+    "selectItems": [],
     "simpleValueType": true,
-    "help": "If your website uses a promotional / coupon code, you can use this field.",
-    "canBeEmptyString": true
+    "notSetText": "N/A",
+    "help": "If your website uses a promotional / coupon code, you can use this field."
   },
   {
-    "type": "TEXT",
-    "name": "currencyCode",
-    "displayName": "Currency Code",
+    "type": "SELECT",
+    "name": "descriptionAffiliate",
+    "displayName": "Description affiliate",
+    "macrosInSelect": true,
+    "selectItems": [],
     "simpleValueType": true,
-    "defaultValue": "EUR",
-    "help": "Multicurrency support. If not set, the default currency set up for the programme is used (e.g. \"GBP\")",
-    "canBeEmptyString": true
+    "notSetText": "N/A",
+    "help": "Information or description about the order, for the affiliate."
   },
   {
-    "type": "TEXT",
-    "name": "actionId",
-    "displayName": "Compensation Code",
+    "type": "SELECT",
+    "name": "descriptionAdvertiser",
+    "displayName": "Description advertiser",
+    "macrosInSelect": true,
+    "selectItems": [],
     "simpleValueType": true,
-    "help": "If specific compensation groups have been set, insert it here.",
-    "canBeEmptyString": true
+    "notSetText": "N/A",
+    "help": "Information or description about the order, for the advertiser. This is not visible to affiliates."
+  },
+  {
+    "type": "SELECT",
+    "name": "extra1",
+    "displayName": "Extra 1",
+    "macrosInSelect": true,
+    "selectItems": [],
+    "simpleValueType": true,
+    "notSetText": "N/A",
+    "help": "Extra information or description about the order. This is also visible to affiliates."
+  },
+  {
+    "type": "SELECT",
+    "name": "extra2",
+    "displayName": "Extra 2",
+    "macrosInSelect": true,
+    "selectItems": [],
+    "simpleValueType": true,
+    "notSetText": "N/A",
+    "help": "Extra information or description about the order. This is also visible to affiliates."
+  },
+  {
+    "type": "SELECT",
+    "name": "extra3",
+    "displayName": "Extra 3",
+    "macrosInSelect": true,
+    "selectItems": [],
+    "simpleValueType": true,
+    "notSetText": "N/A",
+    "help": "Extra information or description about the order. This is also visible to affiliates."
+  },
+  {
+    "type": "SELECT",
+    "name": "extra4",
+    "displayName": "Extra 4",
+    "macrosInSelect": true,
+    "selectItems": [],
+    "simpleValueType": true,
+    "notSetText": "N/A",
+    "help": "Extra information or description about the order. This is also visible to affiliates."
+  },
+  {
+    "type": "SELECT",
+    "name": "extra5",
+    "displayName": "Extra 5",
+    "macrosInSelect": true,
+    "selectItems": [],
+    "simpleValueType": true,
+    "notSetText": "N/A",
+    "help": "Extra information or description about the order. This is also visible to affiliates."
   }
 ]
+
+
+___SANDBOXED_JS_FOR_WEB_TEMPLATE___
+
+const sendPixel = require('sendPixel');
+const getType = require('getType');
+const encodeUri = require('encodeUri');
+const encodeUriComponent = require('encodeUriComponent');
+const log = require('logToConsole');
+
+let url = encodeUri('https://www.' + data.matchingDomain.toString() + '/t/?');
+
+url += 'ci=' + encodeUriComponent(data.campaignId.toString());
+
+if (getType(data.transactionId) !== 'undefined') {
+	url += '&ti=' + encodeUriComponent(data.transactionId.toString());
+}
+else {
+	log('GTM: &ti= is undefined');
+}
+
+if (getType(data.orderAmount) !== 'undefined') {
+	url += '&a=' + encodeUriComponent(data.orderAmount.toString());
+}
+else {
+	log('GTM: &a= is undefined');
+}
+
+if (getType(data.orderRevenue) !== 'undefined') {
+    url += '&r=' + encodeUriComponent(data.orderRevenue.toString());
+}
+else {
+	log('GTM: &r= is undefined');
+}
+
+if (getType(data.currencyCode) !== 'undefined') {
+	url += '&cur=' + encodeUriComponent(data.currencyCode.toString());
+}
+else {
+	log('GTM: &cur= is undefined');
+}
+
+if (getType(data.commissionCode) !== 'undefined') {
+	url += '&cc=' + encodeUriComponent(data.commissionCode.toString());
+}
+else {
+	log('GTM: &cc= is undefined');
+}
+
+if (getType(data.promotionCode) !== 'undefined') {
+	url += '&pr=' + encodeUriComponent(data.promotionCode.toString());
+}
+else {
+	log('GTM: &pr= is undefined');
+}
+
+if (getType(data.descriptionAffiliate) !== 'undefined') {
+	url += '&pn=' + encodeUriComponent(data.descriptionAffiliate.toString());
+}
+else {
+	log('GTM: &pn= is undefined');
+}
+
+if (getType(data.descriptionAdvertiser) !== 'undefined') {
+	url += '&iv=' + encodeUriComponent(data.descriptionAdvertiser.toString());
+}
+else {
+	log('GTM: &iv= is undefined');
+}
+
+if (getType(data.extra1) !== 'undefined') {
+	url += '&e1=' + encodeUriComponent(data.extra1.toString());
+}
+else {
+	log('GTM: &e1= is undefined');
+}
+
+if (getType(data.extra2) !== 'undefined') {
+	url += '&e2=' + encodeUriComponent(data.extra2.toString());
+}
+else {
+	log('GTM: &e2= is undefined');
+}
+
+if (getType(data.extra3) !== 'undefined') {
+	url += '&e3=' + encodeUriComponent(data.extra3.toString());
+}
+else {
+	log('GTM: &e3= is undefined');
+}
+
+if (getType(data.extra4) !== 'undefined') {
+	url += '&e4=' + encodeUriComponent(data.extra4.toString());
+}
+else {
+	log('GTM: &e4= is undefined');
+}
+
+if (getType(data.extra5) !== 'undefined') {
+	url += '&e5=' + encodeUriComponent(data.extra5.toString());
+}
+else {
+	log('GTM: &e5= is undefined');
+}
+
+url += '&src=' + encodeUriComponent('gtm-conversion|1.1');
+
+sendPixel(url, data.gtmOnSuccess, data.gtmOnFailure);
 
 
 ___WEB_PERMISSIONS___
@@ -202,6 +368,13 @@ ___WEB_PERMISSIONS___
       },
       "param": [
         {
+          "key": "allowedUrls",
+          "value": {
+            "type": 1,
+            "string": "specific"
+          }
+        },
+        {
           "key": "urls",
           "value": {
             "type": 2,
@@ -214,7 +387,7 @@ ___WEB_PERMISSIONS___
                 "type": 1,
                 "string": "https://www.bdt9.net/*"
               },
-	      {
+              {
                 "type": 1,
                 "string": "https://www.ds1.nl/*"
               },
@@ -293,79 +466,35 @@ ___WEB_PERMISSIONS___
 ]
 
 
-___SANDBOXED_JS_FOR_WEB_TEMPLATE___
+___TESTS___
 
-const sendPixel = require('sendPixel');
-const getType = require('getType');
-const encodeUri = require('encodeUri');
-const encodeUriComponent = require('encodeUriComponent');
-const log = require('logToConsole');
-
-let url = encodeUri('https://www.' + data.matchingDomain.toString() + '/t/?');
-
-url += 'ci=' + encodeUriComponent(data.campaignId.toString());
-
-if (getType(data.transactionId) !== 'undefined') {
-	url += '&ti=' + encodeUriComponent(data.transactionId.toString());
-}
-else {
-	log('GTM: &ti= is undefined');
-}
-
-if (getType(data.descriptionAffiliate) !== 'undefined') {
-	url += '&pn=' + encodeUriComponent(data.descriptionAffiliate.toString());
-}
-else {
-	log('GTM: &pn= is undefined');
-}
-
-if (getType(data.descriptionAdvertiser) !== 'undefined') {
-	url += '&iv=' + encodeUriComponent(data.descriptionAdvertiser.toString());
-}
-else {
-	log('GTM: &iv= is undefined');
-}
-
-if (getType(data.orderAmount) !== 'undefined') {
-	url += '&a=' + encodeUriComponent(data.orderAmount.toString());
-}
-else {
-	log('GTM: &a= is undefined');
-}
-
-if (getType(data.orderRevenue) !== 'undefined') {
-    url += '&r=' + encodeUriComponent(data.orderRevenue.toString());
-}
-else {
-	log('GTM: &r= is undefined');
-}
-
-if (getType(data.actionId) !== 'undefined') {
-	url += '&cc=' + encodeUriComponent(data.actionId.toString());
-}
-else {
-	log('GTM: &cc= is undefined');
-}
-
-if (getType(data.promotionCode) !== 'undefined') {
-	url += '&pr=' + encodeUriComponent(data.promotionCode.toString());
-}
-else {
-	log('GTM: &pr= is undefined');
-}
-
-if (getType(data.currencyCode) !== 'undefined') {
-	url += '&cur=' + encodeUriComponent(data.currencyCode.toString());
-}
-else {
-	log('GTM: &cur= is undefined');
-}
-
-url += '&src=' + encodeUriComponent('gtm-conversion|1.0');
-
-sendPixel(url, data.gtmOnSuccess, data.gtmOnFailure);
+scenarios:
+- name: Send Pixel Test (complete, success)
+  code: "// Mocked data\nconst mockData = {\n  matchingDomain: 'ds1.nl',\n  campaignId:\
+    \ 12345,\n  transactionId: 'ORDER-0001',\n  orderAmount: 14.99,\n  orderRevenue:\
+    \ 19.99,\n  currencyCode: 'EUR',\n  commissionCode: 'testCommission',\n  promotionCode:\
+    \ 'discount 10%',\n  descriptionAffiliate: 'Test order (affiliate)',\n  descriptionAdvertiser:\
+    \ 'Test order (advertiser)',\n  extra1: 'extra 1',\n  extra2: 'extra 2',\n  extra3:\
+    \ 'extra 3',\n  extra4: 'extra 4',\n  extra5: 'extra 5'\n};\n\n// To assert on\n\
+    let argUrl, argSuccessCallback;\n\n// Mock API\nmock('sendPixel', function ()\
+    \ {\n  argUrl = arguments[0];\n  argSuccessCallback = arguments[1];\n  \n  //\
+    \ Call the success callback\n  argSuccessCallback();\n});\n\n// Call runCode to\
+    \ run the template's code.\nrunCode(mockData);\n\n// Asserts\nassertApi('sendPixel').wasCalled();\n\
+    assertThat(argUrl).isStrictlyEqualTo('https://www.ds1.nl/t/?ci=12345&ti=ORDER-0001&a=14.99&r=19.99&cur=EUR&cc=testCommission&pr=discount%2010%25&pn=Test%20order%20(affiliate)&iv=Test%20order%20(advertiser)&e1=extra%201&e2=extra%202&e3=extra%203&e4=extra%204&e5=extra%205&src=gtm-conversion%7C1.1');\n\
+    assertApi('gtmOnSuccess').wasCalled();"
+- name: Send Pixel Test (partial, failure)
+  code: "// Mocked data\nconst mockData = {\n  matchingDomain: 'ds1.nl',\n  campaignId:\
+    \ 12345,\n  transactionId: 'ORDER-0001',\n  orderAmount: 14.99,\n};\n\n// To assert\
+    \ on\nlet argUrl, argSuccessCallback, argFailureCallback;\n\n// Mock API\nmock('sendPixel',\
+    \ function () {\n  argUrl = arguments[0];\n  argSuccessCallback = arguments[1];\n\
+    \  argFailureCallback = arguments[2];\n  \n  // Call the failure callback\n  argFailureCallback();\n\
+    });\n\n// Call runCode to run the template's code.\nrunCode(mockData);\n\n// Asserts\n\
+    assertApi('sendPixel').wasCalled();\nassertThat(argUrl).isStrictlyEqualTo('https://www.ds1.nl/t/?ci=12345&ti=ORDER-0001&a=14.99&src=gtm-conversion%7C1.1');\n\
+    assertApi('gtmOnFailure').wasCalled();"
 
 
 ___NOTES___
 
 Created on 14/05/2020, 11:22:12
+
+
