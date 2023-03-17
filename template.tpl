@@ -352,7 +352,7 @@ else {
 	log('GTM: &e5= is undefined');
 }
 
-url += '&src=' + encodeUriComponent('gtm-conversion|1.1');
+url += '&src=' + encodeUriComponent('gtm-conversion|1.2');
 
 sendPixel(url, data.gtmOnSuccess, data.gtmOnFailure);
 
@@ -480,7 +480,7 @@ scenarios:
     \ {\n  argUrl = arguments[0];\n  argSuccessCallback = arguments[1];\n  \n  //\
     \ Call the success callback\n  argSuccessCallback();\n});\n\n// Call runCode to\
     \ run the template's code.\nrunCode(mockData);\n\n// Asserts\nassertApi('sendPixel').wasCalled();\n\
-    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-0001&a=14.99&r=19.99&cur=EUR&cc=testCommission&pr=discount%2010%25&pn=Test%20order%20(affiliate)&iv=Test%20order%20(advertiser)&e1=extra%201&e2=extra%202&e3=extra%203&e4=extra%204&e5=extra%205&src=gtm-conversion%7C1.1');\n\
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-0001&a=14.99&r=19.99&cur=EUR&cc=testCommission&pr=discount%2010%25&pn=Test%20order%20(affiliate)&iv=Test%20order%20(advertiser)&e1=extra%201&e2=extra%202&e3=extra%203&e4=extra%204&e5=extra%205&src=gtm-conversion%7C1.2');\n\
     assertApi('gtmOnSuccess').wasCalled();"
 - name: Send Pixel Test (partial, failure)
   code: "// Mocked data\nconst mockData = {\n  matchingDomain: 'ds1.nl',\n  campaignId:\
@@ -489,7 +489,7 @@ scenarios:
     \ function () {\n  argUrl = arguments[0];\n  argSuccessCallback = arguments[1];\n\
     \  argFailureCallback = arguments[2];\n  \n  // Call the failure callback\n  argFailureCallback();\n\
     });\n\n// Call runCode to run the template's code.\nrunCode(mockData);\n\n// Asserts\n\
-    assertApi('sendPixel').wasCalled();\nassertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-0001&a=14.99&src=gtm-conversion%7C1.1');\n\
+    assertApi('sendPixel').wasCalled();\nassertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-0001&a=14.99&src=gtm-conversion%7C1.2');\n\
     assertApi('gtmOnFailure').wasCalled();"
 
 
