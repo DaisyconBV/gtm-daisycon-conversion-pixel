@@ -2,6 +2,8 @@ homepage: "https://www.daisycon.com"
 documentation: "https://faq-advertiser.daisycon.com/hc/en-us/articles/360019494034-Explanation-Implement-Daisycon-conversion-pixel-in-Google-Tag-Manager"
 versions:
   # Latest version
+  - sha: be632764f7f7e95d22555a41b1b0debb4b8adf4c
+    changeNotes: Remove www from all tracking domains
   - sha: e39b5a68307eb5310e3f68e5d62a5f6439f2a9b9
     changeNotes: |2
       Added extra tracking fields.
