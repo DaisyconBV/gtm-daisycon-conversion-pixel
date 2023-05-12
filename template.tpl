@@ -1,12 +1,4 @@
-﻿___TERMS_OF_SERVICE___
-
-By creating or modifying this file you agree to Google Tag Manager's Community
-Template Gallery Developer Terms of Service available at
-https://developers.google.com/tag-manager/gallery-tos (or such other URL as
-Google may provide), as modified from time to time.
-
-
-___INFO___
+﻿___INFO___
 
 {
   "displayName": "Daisycon Conversion Tag",
@@ -37,7 +29,7 @@ ___TEMPLATE_PARAMETERS___
     "type": "SELECT",
     "name": "matchingDomain",
     "displayName": "Matching domain",
-    "macrosInSelect": false,
+    "macrosInSelect": true,
     "selectItems": [
       {
         "value": "at19.net",
@@ -98,7 +90,12 @@ ___TEMPLATE_PARAMETERS___
     ],
     "simpleValueType": true,
     "alwaysInSummary": true,
-    "help": "Select the matching domain. You can ask your contact at Daisycon for more information."
+    "help": "Select the matching domain. You can ask your contact at Daisycon for more information.",
+    "valueValidators": [
+      {
+        "type": "NON_EMPTY"
+      }
+    ]
   },
   {
     "type": "TEXT",
@@ -352,7 +349,7 @@ else {
 	log('GTM: &e5= is undefined');
 }
 
-url += '&src=' + encodeUriComponent('gtm-conversion|1.2');
+url += '&src=' + encodeUriComponent('gtm-conversion|1.3');
 
 sendPixel(url, data.gtmOnSuccess, data.gtmOnFailure);
 
@@ -371,71 +368,7 @@ ___WEB_PERMISSIONS___
           "key": "allowedUrls",
           "value": {
             "type": 1,
-            "string": "specific"
-          }
-        },
-        {
-          "key": "urls",
-          "value": {
-            "type": 2,
-            "listItem": [
-              {
-                "type": 1,
-                "string": "https://at19.net/*"
-              },
-              {
-                "type": 1,
-                "string": "https://bdt9.net/*"
-              },
-              {
-                "type": 1,
-                "string": "https://ds1.nl/*"
-              },
-              {
-                "type": 1,
-                "string": "https://dt51.net/*"
-              },
-              {
-                "type": 1,
-                "string": "https://dt61.net/*"
-              },
-              {
-                "type": 1,
-                "string": "https://fr135.net/*"
-              },
-              {
-                "type": 1,
-                "string": "https://glp8.net/*"
-              },
-              {
-                "type": 1,
-                "string": "https://hs82.net/*"
-              },
-              {
-                "type": 1,
-                "string": "https://jf79.net/*"
-              },
-              {
-                "type": 1,
-                "string": "https://jdt8.net/*"
-              },
-              {
-                "type": 1,
-                "string": "https://lt45.net/*"
-              },
-              {
-                "type": 1,
-                "string": "https://mt74.net/*"
-              },
-              {
-                "type": 1,
-                "string": "https://ndt5.net/*"
-              },
-              {
-                "type": 1,
-                "string": "https://rkn3.net/*"
-              }
-            ]
+            "string": "any"
           }
         }
       ]
@@ -480,7 +413,7 @@ scenarios:
     \ {\n  argUrl = arguments[0];\n  argSuccessCallback = arguments[1];\n  \n  //\
     \ Call the success callback\n  argSuccessCallback();\n});\n\n// Call runCode to\
     \ run the template's code.\nrunCode(mockData);\n\n// Asserts\nassertApi('sendPixel').wasCalled();\n\
-    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-0001&a=14.99&r=19.99&cur=EUR&cc=testCommission&pr=discount%2010%25&pn=Test%20order%20(affiliate)&iv=Test%20order%20(advertiser)&e1=extra%201&e2=extra%202&e3=extra%203&e4=extra%204&e5=extra%205&src=gtm-conversion%7C1.2');\n\
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-0001&a=14.99&r=19.99&cur=EUR&cc=testCommission&pr=discount%2010%25&pn=Test%20order%20(affiliate)&iv=Test%20order%20(advertiser)&e1=extra%201&e2=extra%202&e3=extra%203&e4=extra%204&e5=extra%205&src=gtm-conversion%7C1.3');\n\
     assertApi('gtmOnSuccess').wasCalled();"
 - name: Send Pixel Test (partial, failure)
   code: "// Mocked data\nconst mockData = {\n  matchingDomain: 'ds1.nl',\n  campaignId:\
@@ -489,7 +422,7 @@ scenarios:
     \ function () {\n  argUrl = arguments[0];\n  argSuccessCallback = arguments[1];\n\
     \  argFailureCallback = arguments[2];\n  \n  // Call the failure callback\n  argFailureCallback();\n\
     });\n\n// Call runCode to run the template's code.\nrunCode(mockData);\n\n// Asserts\n\
-    assertApi('sendPixel').wasCalled();\nassertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-0001&a=14.99&src=gtm-conversion%7C1.2');\n\
+    assertApi('sendPixel').wasCalled();\nassertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-0001&a=14.99&src=gtm-conversion%7C1.3');\n\
     assertApi('gtmOnFailure').wasCalled();"
 
 
