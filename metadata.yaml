@@ -2,6 +2,8 @@ homepage: "https://www.daisycon.com"
 documentation: "https://faq-advertiser.daisycon.com/hc/en-us/articles/360019494034-Explanation-Implement-Daisycon-conversion-pixel-in-Google-Tag-Manager"
 versions:
   # Latest version
+  - sha: 7c1287992c0ee0af6b8d375a15b2ace1aa4a50bf
+    changeNotes: Fix terms of service
   - sha: 0516a637dfa57224b04fb311d30ca705c344c6e9
     changeNotes: Enable custom tracking domains for matching domain
   - sha: be632764f7f7e95d22555a41b1b0debb4b8adf4c
