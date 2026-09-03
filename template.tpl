@@ -13,7 +13,8 @@ ___INFO___
   "description": "Add the Daisycon Conversion Tag to the Thank You / Order Confirmation page of your website. The Conversion Tag has to be added to instruct the Daisycon system that a conversion has taken place.",
   "categories": [
     "AFFILIATE_MARKETING",
-    "CONVERSION_TRACKING"
+    "CONVERSIONS",
+    "ATTRIBUTION"
   ],
   "securityGroups": [],
   "id": "cvt_temp_public_id",
@@ -121,135 +122,306 @@ ___TEMPLATE_PARAMETERS___
   },
   {
     "type": "SELECT",
-    "name": "transactionId",
-    "displayName": "Transaction ID",
+    "name": "trackingType",
+    "displayName": "Tracking type",
+    "macrosInSelect": false,
+    "selectItems": [
+      {
+        "value": "standard",
+        "displayValue": "Standard transaction tracking"
+      },
+      {
+        "value": "productLevelGa4",
+        "displayValue": "Product-level tracking from GA4 ecommerce data"
+      },
+      {
+        "value": "productLevelUa",
+        "displayValue": "Product-level tracking from UA Enhanced Ecommerce data"
+      },
+      {
+        "value": "productLevelDaisyconArray",
+        "displayValue": "Product-level tracking from Daisycon product array"
+      }
+    ],
+    "simpleValueType": true,
+    "defaultValue": "standard",
+    "alwaysInSummary": true,
+    "help": "Select standard tracking or a product-level ecommerce source."
+  },
+  {
+    "type": "SELECT",
+    "name": "daisyconProductArray",
+    "displayName": "Daisycon product array",
     "macrosInSelect": true,
     "selectItems": [],
     "simpleValueType": true,
+    "notSetText": "Required for Daisycon product array mode",
+    "help": "Select a GTM variable that returns an array of Daisycon product objects. Supported keys: a, r, qty, sku, cc, pn, iv, e1, e2, e3, e4 and e5.",
+    "enablingConditions": [
+      {
+        "paramName": "trackingType",
+        "paramValue": "productLevelDaisyconArray",
+        "type": "EQUALS"
+      }
+    ],
     "valueValidators": [
       {
         "type": "NON_EMPTY"
       }
+    ]
+  },
+  {
+    "type": "SELECT",
+    "name": "productLevelFallbackBehavior",
+    "displayName": "Product-level fallback behavior",
+    "macrosInSelect": false,
+    "selectItems": [
+      {
+        "value": "fail",
+        "displayValue": "Fail when no valid products are found"
+      },
+      {
+        "value": "basket",
+        "displayValue": "Send standard conversion instead"
+      }
     ],
-    "help": "Unique reference for the sale (e.g. order- or booking number), maximum 50 characters."
+    "simpleValueType": true,
+    "defaultValue": "fail",
+    "help": "Choose what happens when product-level tracking is selected but no valid products can be built. Standard conversion sends one transaction without product lines, using the available order-level and tag-level values.",
+    "enablingConditions": [
+      {
+        "paramName": "trackingType",
+        "paramValue": "productLevelGa4",
+        "type": "EQUALS"
+      },
+      {
+        "paramName": "trackingType",
+        "paramValue": "productLevelUa",
+        "type": "EQUALS"
+      },
+      {
+        "paramName": "trackingType",
+        "paramValue": "productLevelDaisyconArray",
+        "type": "EQUALS"
+      }
+    ]
   },
   {
-    "type": "SELECT",
-    "name": "orderAmount",
-    "displayName": "Order amount",
-    "macrosInSelect": true,
-    "selectItems": [],
-    "simpleValueType": true,
-    "help": "Total value of the order / basket without any delivery costs or discount."
+    "type": "GROUP",
+    "name": "conversionDetails",
+    "displayName": "Conversion details",
+    "groupStyle": "ZIPPY_OPEN",
+    "subParams": [
+      {
+        "type": "SELECT",
+        "name": "transactionId",
+        "displayName": "Transaction ID",
+        "macrosInSelect": true,
+        "selectItems": [],
+        "simpleValueType": true,
+        "valueValidators": [
+          {
+            "type": "NON_EMPTY"
+          }
+        ],
+        "help": "Unique reference for the sale (e.g. order- or booking number), maximum 50 characters."
+      },
+      {
+        "type": "SELECT",
+        "name": "orderAmount",
+        "displayName": "Order amount",
+        "macrosInSelect": true,
+        "selectItems": [],
+        "simpleValueType": true,
+        "help": "Total value of the order / basket without any delivery costs or discount."
+      },
+      {
+        "type": "SELECT",
+        "name": "orderRevenue",
+        "displayName": "Order revenue",
+        "macrosInSelect": true,
+        "selectItems": [],
+        "simpleValueType": true,
+        "help": "Total revenue of the order."
+      },
+      {
+        "type": "SELECT",
+        "name": "currencyCode",
+        "displayName": "Currency code",
+        "macrosInSelect": true,
+        "selectItems": [],
+        "simpleValueType": true,
+        "notSetText": "N/A",
+        "help": "Multicurrency support. If not set, the default currency of the campaign is used. Please use the ISO 4217 abbreviation (e.g. EUR)"
+      },
+      {
+        "type": "SELECT",
+        "name": "commissionCode",
+        "displayName": "Commission code",
+        "macrosInSelect": true,
+        "selectItems": [],
+        "simpleValueType": true,
+        "help": "Used for standard tracking. For product-level tracking, choose how this value is used under Product commission codes.",
+        "notSetText": "N/A"
+      },
+      {
+        "type": "SELECT",
+        "name": "promotionCode",
+        "displayName": "Promotion code",
+        "macrosInSelect": true,
+        "selectItems": [],
+        "simpleValueType": true,
+        "notSetText": "N/A",
+        "help": "If your website uses a promotional / coupon code, you can use this field."
+      },
+      {
+        "type": "GROUP",
+        "name": "productCommissionCodeSettings",
+        "displayName": "Product commission codes",
+        "groupStyle": "NO_ZIPPY",
+        "subParams": [
+          {
+            "type": "SELECT",
+            "name": "productCommissionCodeSource",
+            "displayName": "Source",
+            "macrosInSelect": false,
+            "selectItems": [
+              {
+                "value": "product",
+                "displayValue": "Each product's commission code or category"
+              },
+              {
+                "value": "custom",
+                "displayValue": "Another property from each product"
+              },
+              {
+                "value": "tag",
+                "displayValue": "Commission code above for every product"
+              }
+            ],
+            "simpleValueType": true,
+            "defaultValue": "product",
+            "help": "Choose where product commission codes come from. The Commission code above is the fallback for the first two options."
+          },
+          {
+            "type": "TEXT",
+            "name": "productCommissionCodeProperty",
+            "displayName": "Product property name",
+            "simpleValueType": true,
+            "valueHint": "item_brand",
+            "notSetText": "Product property name is required",
+            "help": "Enter the property name, not its value. For example: item_brand or brand.",
+            "enablingConditions": [
+              {
+                "paramName": "productCommissionCodeSource",
+                "paramValue": "custom",
+                "type": "EQUALS"
+              }
+            ],
+            "valueValidators": [
+              {
+                "type": "NON_EMPTY"
+              }
+            ]
+          }
+        ],
+        "enablingConditions": [
+          {
+            "paramName": "trackingType",
+            "paramValue": "productLevelGa4",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "trackingType",
+            "paramValue": "productLevelUa",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "trackingType",
+            "paramValue": "productLevelDaisyconArray",
+            "type": "EQUALS"
+          }
+        ]
+      }
+    ]
   },
   {
-    "type": "SELECT",
-    "name": "orderRevenue",
-    "displayName": "Order revenue",
-    "macrosInSelect": true,
-    "selectItems": [],
-    "simpleValueType": true,
-    "help": "Total revenue of the order."
-  },
-  {
-    "type": "SELECT",
-    "name": "currencyCode",
-    "displayName": "Currency code",
-    "macrosInSelect": true,
-    "selectItems": [],
-    "simpleValueType": true,
-    "notSetText": "N/A",
-    "help": "Multicurrency support. If not set, the default currency of the campaign is used. Please use the ISO 4217 abbreviation (e.g. EUR)"
-  },
-  {
-    "type": "SELECT",
-    "name": "commissionCode",
-    "displayName": "Commission code",
-    "macrosInSelect": true,
-    "selectItems": [],
-    "simpleValueType": true,
-    "help": "The commission code as defined in the compensation groups that have been set at Daisycon.",
-    "notSetText": "N/A"
-  },
-  {
-    "type": "SELECT",
-    "name": "promotionCode",
-    "displayName": "Promotion code",
-    "macrosInSelect": true,
-    "selectItems": [],
-    "simpleValueType": true,
-    "notSetText": "N/A",
-    "help": "If your website uses a promotional / coupon code, you can use this field."
-  },
-  {
-    "type": "SELECT",
-    "name": "descriptionAffiliate",
-    "displayName": "Description affiliate",
-    "macrosInSelect": true,
-    "selectItems": [],
-    "simpleValueType": true,
-    "notSetText": "N/A",
-    "help": "Information or description about the order, for the affiliate."
-  },
-  {
-    "type": "SELECT",
-    "name": "descriptionAdvertiser",
-    "displayName": "Description advertiser",
-    "macrosInSelect": true,
-    "selectItems": [],
-    "simpleValueType": true,
-    "notSetText": "N/A",
-    "help": "Information or description about the order, for the advertiser. This is not visible to affiliates."
-  },
-  {
-    "type": "SELECT",
-    "name": "extra1",
-    "displayName": "Extra 1",
-    "macrosInSelect": true,
-    "selectItems": [],
-    "simpleValueType": true,
-    "notSetText": "N/A",
-    "help": "Extra information or description about the order. This is also visible to affiliates."
-  },
-  {
-    "type": "SELECT",
-    "name": "extra2",
-    "displayName": "Extra 2",
-    "macrosInSelect": true,
-    "selectItems": [],
-    "simpleValueType": true,
-    "notSetText": "N/A",
-    "help": "Extra information or description about the order. This is also visible to affiliates."
-  },
-  {
-    "type": "SELECT",
-    "name": "extra3",
-    "displayName": "Extra 3",
-    "macrosInSelect": true,
-    "selectItems": [],
-    "simpleValueType": true,
-    "notSetText": "N/A",
-    "help": "Extra information or description about the order. This is also visible to affiliates."
-  },
-  {
-    "type": "SELECT",
-    "name": "extra4",
-    "displayName": "Extra 4",
-    "macrosInSelect": true,
-    "selectItems": [],
-    "simpleValueType": true,
-    "notSetText": "N/A",
-    "help": "Extra information or description about the order. This is also visible to affiliates."
-  },
-  {
-    "type": "SELECT",
-    "name": "extra5",
-    "displayName": "Extra 5",
-    "macrosInSelect": true,
-    "selectItems": [],
-    "simpleValueType": true,
-    "notSetText": "N/A",
-    "help": "Extra information or description about the order. This is also visible to affiliates."
+    "type": "GROUP",
+    "name": "descriptionsAndExtras",
+    "displayName": "Descriptions and extras",
+    "groupStyle": "ZIPPY_CLOSED",
+    "subParams": [
+      {
+        "type": "SELECT",
+        "name": "descriptionAffiliate",
+        "displayName": "Description affiliate",
+        "macrosInSelect": true,
+        "selectItems": [],
+        "simpleValueType": true,
+        "notSetText": "N/A",
+        "help": "Information or description about the order, for the affiliate."
+      },
+      {
+        "type": "SELECT",
+        "name": "descriptionAdvertiser",
+        "displayName": "Description advertiser",
+        "macrosInSelect": true,
+        "selectItems": [],
+        "simpleValueType": true,
+        "notSetText": "N/A",
+        "help": "Information or description about the order, for the advertiser. This is not visible to affiliates."
+      },
+      {
+        "type": "SELECT",
+        "name": "extra1",
+        "displayName": "Extra 1",
+        "macrosInSelect": true,
+        "selectItems": [],
+        "simpleValueType": true,
+        "notSetText": "N/A",
+        "help": "Extra information or description about the order. This is also visible to affiliates."
+      },
+      {
+        "type": "SELECT",
+        "name": "extra2",
+        "displayName": "Extra 2",
+        "macrosInSelect": true,
+        "selectItems": [],
+        "simpleValueType": true,
+        "notSetText": "N/A",
+        "help": "Extra information or description about the order. This is also visible to affiliates."
+      },
+      {
+        "type": "SELECT",
+        "name": "extra3",
+        "displayName": "Extra 3",
+        "macrosInSelect": true,
+        "selectItems": [],
+        "simpleValueType": true,
+        "notSetText": "N/A",
+        "help": "Extra information or description about the order. This is also visible to affiliates."
+      },
+      {
+        "type": "SELECT",
+        "name": "extra4",
+        "displayName": "Extra 4",
+        "macrosInSelect": true,
+        "selectItems": [],
+        "simpleValueType": true,
+        "notSetText": "N/A",
+        "help": "Extra information or description about the order. This is also visible to affiliates."
+      },
+      {
+        "type": "SELECT",
+        "name": "extra5",
+        "displayName": "Extra 5",
+        "macrosInSelect": true,
+        "selectItems": [],
+        "simpleValueType": true,
+        "notSetText": "N/A",
+        "help": "Extra information or description about the order. This is also visible to affiliates."
+      }
+    ]
   }
 ]
 
@@ -257,109 +429,350 @@ ___TEMPLATE_PARAMETERS___
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 const sendPixel = require('sendPixel');
-const getType = require('getType');
+const copyFromDataLayer = require('copyFromDataLayer');
 const encodeUri = require('encodeUri');
 const encodeUriComponent = require('encodeUriComponent');
 const log = require('logToConsole');
+const makeNumber = require('makeNumber');
+const makeString = require('makeString');
+const Math = require('Math');
 
-let url = encodeUri('https://' + data.matchingDomain.toString() + '/t/?');
+const isDefined = (value) => value !== undefined && value !== null;
+const isSet = (value) => isDefined(value) && value !== '';
 
-url += 'ci=' + encodeUriComponent(data.campaignId.toString());
+const firstSet = (values) => {
+  for (let i = 0; i < values.length; i++) {
+    if (isSet(values[i])) {
+      return values[i];
+    }
+  }
+};
 
-if (getType(data.transactionId) !== 'undefined') {
-	url += '&ti=' + encodeUriComponent(data.transactionId.toString());
-}
-else {
-	log('GTM: &ti= is undefined');
+const firstField = (object, fields) => {
+  if (!object || typeof object !== 'object') {
+    return undefined;
+  }
+  for (let i = 0; i < fields.length; i++) {
+    const value = object[fields[i]];
+    if (isSet(value)) {
+      return value;
+    }
+  }
+};
+
+const firstDataLayerValue = (keys) => {
+  for (let i = 0; i < keys.length; i++) {
+    const value = copyFromDataLayer(keys[i]);
+    if (isSet(value)) {
+      return value;
+    }
+  }
+};
+
+const buildQueryString = (parameters, keepEmpty, logMissing) => {
+  const parts = [];
+  for (const key in parameters) {
+    const value = parameters[key];
+    if (isDefined(value) && (keepEmpty || value !== '')) {
+      parts.push(encodeUriComponent(key) + '=' + encodeUriComponent(value.toString()));
+    } else if (logMissing && value === undefined) {
+      log('GTM: &' + key + '= is undefined');
+    }
+  }
+  return parts.join('&');
+};
+
+const formatQuantity = (value) => {
+  const rounded = Math.round(value);
+  return rounded === value ? makeString(rounded) : makeString(value);
+};
+
+const getQuantity = (value) => {
+  let quantity = 1;
+  if (isSet(value)) {
+    quantity = makeNumber(value);
+  }
+  if (quantity !== quantity || quantity <= 0) {
+    return null;
+  }
+  return {
+    number: quantity,
+    value: formatQuantity(quantity)
+  };
+};
+
+const formatMoney = (value) => {
+  let number = makeNumber(value);
+  if (number !== number) {
+    return undefined;
+  }
+
+  let sign = '';
+  if (number < 0) {
+    sign = '-';
+    number = Math.abs(number);
+  }
+
+  const cents = Math.round(number * 100);
+  const major = Math.floor(cents / 100);
+  const minor = cents - major * 100;
+  return sign + makeString(major) + '.' + (minor < 10 ? '0' : '') + makeString(minor);
+};
+
+const setIfValue = (product, key, value) => {
+  if (isSet(value)) {
+    product[key] = makeString(value);
+  }
+};
+
+const setMoneyIfValue = (product, key, value) => {
+  const formatted = formatMoney(value);
+  if (isSet(formatted)) {
+    product[key] = formatted;
+  }
+};
+
+const productFields = {
+  productLevelGa4: {
+    amount: ['daisycon_a', 'a', 'amount'],
+    price: ['price'],
+    revenue: ['daisycon_r', 'r', 'revenue'],
+    quantity: ['daisycon_qty', 'qty', 'quantity'],
+    sku: ['daisycon_sku', 'sku', 'item_id', 'itemId', 'id'],
+    commissionCode: ['daisycon_cc', 'cc', 'item_category', 'category'],
+    name: ['daisycon_pn', 'pn', 'item_name', 'name'],
+    description: ['daisycon_iv', 'iv', 'item_brand', 'brand', 'item_category', 'category', 'item_name', 'name']
+  },
+  productLevelUa: {
+    amount: ['daisycon_a', 'a', 'amount'],
+    price: ['priceExcluded', 'price'],
+    revenue: ['daisycon_r', 'r', 'revenue'],
+    quantity: ['daisycon_qty', 'qty', 'quantity'],
+    sku: ['daisycon_sku', 'sku', 'id', 'item_id'],
+    commissionCode: ['daisycon_cc', 'cc', 'category', 'marketing_group', 'brand'],
+    name: ['daisycon_pn', 'pn', 'name', 'item_name'],
+    description: ['daisycon_iv', 'iv', 'brand', 'category', 'name', 'item_name']
+  },
+  productLevelDaisyconArray: {
+    amount: ['daisycon_a', 'a', 'amount', 'priceTotal'],
+    price: ['priceExcluded', 'price'],
+    revenue: ['daisycon_r', 'r', 'revenue'],
+    quantity: ['daisycon_qty', 'qty', 'quantity'],
+    sku: ['daisycon_sku', 'sku', 'id', 'item_id'],
+    commissionCode: ['daisycon_cc', 'cc'],
+    name: ['daisycon_pn', 'pn', 'name', 'item_name'],
+    description: ['daisycon_iv', 'iv', 'brand', 'category', 'name', 'item_name']
+  }
+};
+
+const getProductCommissionCode = (product, fields) => {
+  const commissionCodeSource = isSet(data.productCommissionCodeSource)
+    ? data.productCommissionCodeSource
+    : 'product';
+  const customProductCode = commissionCodeSource === 'custom' &&
+    isSet(data.productCommissionCodeProperty)
+    ? product[data.productCommissionCodeProperty]
+    : undefined;
+  const productCode = firstSet([
+    customProductCode,
+    firstField(product, fields.commissionCode)
+  ]);
+  return firstSet(
+    commissionCodeSource === 'tag'
+      ? [data.commissionCode, productCode]
+      : [productCode, data.commissionCode]
+  );
+};
+
+const normalizeProduct = (product, fields) => {
+  if (!product || typeof product !== 'object' ||
+      product.daisycon_exclude || product.exclude || product.daisyconExclude) {
+    return null;
+  }
+
+  const quantity = getQuantity(firstField(product, fields.quantity));
+  if (quantity === null) {
+    return null;
+  }
+
+  let amount = firstField(product, fields.amount);
+  if (!isSet(amount)) {
+    const price = firstField(product, fields.price);
+    if (!isSet(price)) {
+      return null;
+    }
+    amount = makeNumber(price) * quantity.number;
+  }
+
+  let revenue = firstField(product, fields.revenue);
+  if (!isSet(revenue)) {
+    revenue = amount;
+  }
+
+  const normalized = {};
+  setMoneyIfValue(normalized, 'a', amount);
+  setMoneyIfValue(normalized, 'r', revenue);
+  setIfValue(normalized, 'qty', quantity.value);
+  setIfValue(normalized, 'sku', firstField(product, fields.sku));
+  setIfValue(normalized, 'cc', getProductCommissionCode(product, fields));
+  setIfValue(normalized, 'pn', firstField(product, fields.name));
+  setIfValue(normalized, 'iv', firstField(product, fields.description));
+  setIfValue(normalized, 'e1', firstField(product, ['daisycon_e1', 'e1']));
+  setIfValue(normalized, 'e2', firstField(product, ['daisycon_e2', 'e2']));
+  setIfValue(normalized, 'e3', firstField(product, ['daisycon_e3', 'e3']));
+  setIfValue(normalized, 'e4', firstField(product, ['daisycon_e4', 'e4']));
+  setIfValue(normalized, 'e5', firstField(product, ['daisycon_e5', 'e5']));
+
+  if (!isSet(normalized.a) || !isSet(normalized.r) || !isSet(normalized.qty)) {
+    return null;
+  }
+  return normalized;
+};
+
+const normalizeProducts = (products, fields) => {
+  const normalized = [];
+  if (!products || typeof products.length !== 'number') {
+    return normalized;
+  }
+  for (let i = 0; i < products.length; i++) {
+    const product = normalizeProduct(products[i], fields);
+    if (product !== null) {
+      normalized.push(product);
+    }
+  }
+  return normalized;
+};
+
+const productToQueryString = (product) => {
+  const fields = ['a', 'r', 'qty', 'sku', 'cc', 'pn', 'iv', 'e1', 'e2', 'e3', 'e4', 'e5'];
+  let value = '';
+  for (let i = 0; i < fields.length; i++) {
+    const field = fields[i];
+    if (isSet(product[field])) {
+      value += '{' + field + ':' + encodeUriComponent(product[field]) + '}';
+    }
+  }
+  return 'p[]=' + value;
+};
+
+const getProductLevelProducts = (trackingType) => {
+  const products = trackingType === 'productLevelDaisyconArray'
+    ? data.daisyconProductArray
+    : copyFromDataLayer(
+        trackingType === 'productLevelGa4'
+          ? 'ecommerce.items'
+          : 'ecommerce.purchase.products'
+      );
+  return normalizeProducts(products, productFields[trackingType]);
+};
+
+const getProductLevelOrderValue = (trackingType, fieldName) => {
+  if (trackingType === 'productLevelDaisyconArray') {
+    return data[fieldName];
+  }
+
+  const orderFields = trackingType === 'productLevelGa4'
+    ? {
+        transactionId: ['ecommerce.transaction_id'],
+        currencyCode: ['ecommerce.currency'],
+        promotionCode: ['ecommerce.coupon']
+      }
+    : {
+        transactionId: ['ecommerce.purchase.actionField.id'],
+        currencyCode: ['ecommerce.currencyCode', 'ecommerce.purchase.actionField.currency'],
+        promotionCode: ['ecommerce.purchase.actionField.coupon']
+      };
+
+  return firstSet([firstDataLayerValue(orderFields[fieldName]), data[fieldName]]);
+};
+
+const buildStandardParameters = (orderValues) => {
+  const useOrderValues = orderValues !== undefined;
+  orderValues = orderValues || {};
+  return {
+    ci: data.campaignId,
+    ti: useOrderValues ? firstSet([orderValues.transactionId, data.transactionId]) : data.transactionId,
+    a: data.orderAmount,
+    r: data.orderRevenue,
+    cur: useOrderValues ? firstSet([orderValues.currencyCode, data.currencyCode]) : data.currencyCode,
+    cc: data.commissionCode,
+    pr: useOrderValues ? firstSet([orderValues.promotionCode, data.promotionCode]) : data.promotionCode,
+    pn: data.descriptionAffiliate,
+    iv: data.descriptionAdvertiser,
+    e1: data.extra1,
+    e2: data.extra2,
+    e3: data.extra3,
+    e4: data.extra4,
+    e5: data.extra5,
+    src: 'gtm-conversion|2.0.1'
+  };
+};
+
+const send = (queryString) => {
+  const url = encodeUri('https://' + data.matchingDomain.toString() + '/t/?') + queryString;
+  sendPixel(url, data.gtmOnSuccess, data.gtmOnFailure);
+};
+
+const trackingType = isSet(data.trackingType) ? data.trackingType : 'standard';
+
+if (trackingType === 'standard') {
+  send(buildQueryString(buildStandardParameters(), true, true));
+  return;
 }
 
-if (getType(data.orderAmount) !== 'undefined') {
-	url += '&a=' + encodeUriComponent(data.orderAmount.toString());
-}
-else {
-	log('GTM: &a= is undefined');
-}
-
-if (getType(data.orderRevenue) !== 'undefined') {
-    url += '&r=' + encodeUriComponent(data.orderRevenue.toString());
-}
-else {
-	log('GTM: &r= is undefined');
+if (!productFields[trackingType]) {
+  log('Daisycon: Unknown product-level tracking type. Request not sent.');
+  data.gtmOnFailure();
+  return;
 }
 
-if (getType(data.currencyCode) !== 'undefined') {
-	url += '&cur=' + encodeUriComponent(data.currencyCode.toString());
-}
-else {
-	log('GTM: &cur= is undefined');
+const products = getProductLevelProducts(trackingType);
+const orderValues = {
+  transactionId: getProductLevelOrderValue(trackingType, 'transactionId'),
+  currencyCode: getProductLevelOrderValue(trackingType, 'currencyCode'),
+  promotionCode: getProductLevelOrderValue(trackingType, 'promotionCode')
+};
+
+if (!isSet(data.campaignId) || !isSet(orderValues.transactionId)) {
+  log('Daisycon: Campaign ID and transaction ID are required for product-level tracking.');
+  data.gtmOnFailure();
+  return;
 }
 
-if (getType(data.commissionCode) !== 'undefined') {
-	url += '&cc=' + encodeUriComponent(data.commissionCode.toString());
-}
-else {
-	log('GTM: &cc= is undefined');
+if (products.length === 0) {
+  const fallbackBehavior = isSet(data.productLevelFallbackBehavior)
+    ? data.productLevelFallbackBehavior
+    : 'fail';
+  if (fallbackBehavior !== 'basket') {
+    log('Daisycon: Product-level tracking selected but no valid products were found. Request not sent.');
+    data.gtmOnFailure();
+    return;
+  }
+
+  log('Daisycon: No valid products found. Sending standard fallback conversion.');
+  const fallbackParameters = buildStandardParameters(orderValues);
+  const fallbackMarker = 'Fallback mode: product level failed';
+  fallbackParameters.iv = isSet(fallbackParameters.iv)
+    ? makeString(fallbackParameters.iv) + ' | ' + fallbackMarker
+    : fallbackMarker;
+  send(buildQueryString(fallbackParameters, false, false));
+  return;
 }
 
-if (getType(data.promotionCode) !== 'undefined') {
-	url += '&pr=' + encodeUriComponent(data.promotionCode.toString());
-}
-else {
-	log('GTM: &pr= is undefined');
-}
+const parts = [buildQueryString({
+  ci: data.campaignId,
+  ti: orderValues.transactionId,
+  cur: orderValues.currencyCode,
+  pr: orderValues.promotionCode,
+  np: products.length
+}, false, false)];
 
-if (getType(data.descriptionAffiliate) !== 'undefined') {
-	url += '&pn=' + encodeUriComponent(data.descriptionAffiliate.toString());
+for (let i = 0; i < products.length; i++) {
+  parts.push(productToQueryString(products[i]));
 }
-else {
-	log('GTM: &pn= is undefined');
-}
+parts.push('src=' + encodeUriComponent('gtm-conversion|2.0.1'));
 
-if (getType(data.descriptionAdvertiser) !== 'undefined') {
-	url += '&iv=' + encodeUriComponent(data.descriptionAdvertiser.toString());
-}
-else {
-	log('GTM: &iv= is undefined');
-}
-
-if (getType(data.extra1) !== 'undefined') {
-	url += '&e1=' + encodeUriComponent(data.extra1.toString());
-}
-else {
-	log('GTM: &e1= is undefined');
-}
-
-if (getType(data.extra2) !== 'undefined') {
-	url += '&e2=' + encodeUriComponent(data.extra2.toString());
-}
-else {
-	log('GTM: &e2= is undefined');
-}
-
-if (getType(data.extra3) !== 'undefined') {
-	url += '&e3=' + encodeUriComponent(data.extra3.toString());
-}
-else {
-	log('GTM: &e3= is undefined');
-}
-
-if (getType(data.extra4) !== 'undefined') {
-	url += '&e4=' + encodeUriComponent(data.extra4.toString());
-}
-else {
-	log('GTM: &e4= is undefined');
-}
-
-if (getType(data.extra5) !== 'undefined') {
-	url += '&e5=' + encodeUriComponent(data.extra5.toString());
-}
-else {
-	log('GTM: &e5= is undefined');
-}
-
-url += '&src=' + encodeUriComponent('gtm-conversion|1.3');
-
-sendPixel(url, data.gtmOnSuccess, data.gtmOnFailure);
+send(parts.join('&'));
 
 
 ___WEB_PERMISSIONS___
@@ -377,6 +790,32 @@ ___WEB_PERMISSIONS___
           "value": {
             "type": 1,
             "string": "any"
+          }
+        }
+      ]
+    },
+    "clientAnnotations": {
+      "isEditedByUser": true
+    },
+    "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "read_data_layer",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "keyPatterns",
+          "value": {
+            "type": 2,
+            "listItem": [
+              {
+                "type": 1,
+                "string": "ecommerce.*"
+              }
+            ]
           }
         }
       ]
@@ -411,31 +850,339 @@ ___TESTS___
 
 scenarios:
 - name: Send Pixel Test (complete, success)
-  code: "// Mocked data\nconst mockData = {\n  matchingDomain: 'ds1.nl',\n  campaignId:\
-    \ 12345,\n  transactionId: 'ORDER-0001',\n  orderAmount: 14.99,\n  orderRevenue:\
-    \ 19.99,\n  currencyCode: 'EUR',\n  commissionCode: 'testCommission',\n  promotionCode:\
-    \ 'discount 10%',\n  descriptionAffiliate: 'Test order (affiliate)',\n  descriptionAdvertiser:\
-    \ 'Test order (advertiser)',\n  extra1: 'extra 1',\n  extra2: 'extra 2',\n  extra3:\
-    \ 'extra 3',\n  extra4: 'extra 4',\n  extra5: 'extra 5'\n};\n\n// To assert on\n\
-    let argUrl, argSuccessCallback;\n\n// Mock API\nmock('sendPixel', function ()\
-    \ {\n  argUrl = arguments[0];\n  argSuccessCallback = arguments[1];\n  \n  //\
-    \ Call the success callback\n  argSuccessCallback();\n});\n\n// Call runCode to\
-    \ run the template's code.\nrunCode(mockData);\n\n// Asserts\nassertApi('sendPixel').wasCalled();\n\
-    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-0001&a=14.99&r=19.99&cur=EUR&cc=testCommission&pr=discount%2010%25&pn=Test%20order%20(affiliate)&iv=Test%20order%20(advertiser)&e1=extra%201&e2=extra%202&e3=extra%203&e4=extra%204&e5=extra%205&src=gtm-conversion%7C1.3');\n\
-    assertApi('gtmOnSuccess').wasCalled();"
+  code: |-
+    const mockData = {
+      matchingDomain: 'ds1.nl',
+      campaignId: 12345,
+      transactionId: 'ORDER-0001',
+      orderAmount: 14.99,
+      orderRevenue: 19.99,
+      currencyCode: 'EUR',
+      commissionCode: 'testCommission',
+      promotionCode: 'discount 10%',
+      descriptionAffiliate: 'Test order (affiliate)',
+      descriptionAdvertiser: 'Test order (advertiser)',
+      extra1: 'extra 1',
+      extra2: 'extra 2',
+      extra3: 'extra 3',
+      extra4: 'extra 4',
+      extra5: 'extra 5'
+    };
+
+    let argUrl;
+
+    mock('sendPixel', function(url, successCallback) {
+      argUrl = url;
+      successCallback();
+    });
+
+    runCode(mockData);
+
+    assertApi('sendPixel').wasCalled();
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-0001&a=14.99&r=19.99&cur=EUR&cc=testCommission&pr=discount%2010%25&pn=Test%20order%20(affiliate)&iv=Test%20order%20(advertiser)&e1=extra%201&e2=extra%202&e3=extra%203&e4=extra%204&e5=extra%205&src=gtm-conversion%7C2.0.1');
+    assertApi('gtmOnSuccess').wasCalled();
 - name: Send Pixel Test (partial, failure)
-  code: "// Mocked data\nconst mockData = {\n  matchingDomain: 'ds1.nl',\n  campaignId:\
-    \ 12345,\n  transactionId: 'ORDER-0001',\n  orderAmount: 14.99,\n};\n\n// To assert\
-    \ on\nlet argUrl, argSuccessCallback, argFailureCallback;\n\n// Mock API\nmock('sendPixel',\
-    \ function () {\n  argUrl = arguments[0];\n  argSuccessCallback = arguments[1];\n\
-    \  argFailureCallback = arguments[2];\n  \n  // Call the failure callback\n  argFailureCallback();\n\
-    });\n\n// Call runCode to run the template's code.\nrunCode(mockData);\n\n// Asserts\n\
-    assertApi('sendPixel').wasCalled();\nassertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-0001&a=14.99&src=gtm-conversion%7C1.3');\n\
-    assertApi('gtmOnFailure').wasCalled();"
+  code: |-
+    const mockData = {
+      matchingDomain: 'ds1.nl',
+      campaignId: 12345,
+      transactionId: 'ORDER-0001',
+      orderAmount: 14.99
+    };
 
+    let argUrl;
 
+    mock('sendPixel', function(url, successCallback, failureCallback) {
+      argUrl = url;
+      failureCallback();
+    });
+
+    runCode(mockData);
+
+    assertApi('sendPixel').wasCalled();
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-0001&a=14.99&src=gtm-conversion%7C2.0.1');
+    assertApi('gtmOnFailure').wasCalled();
+- name: Legacy config defaults to standard tracking
+  code: |-
+    const mockData = {
+      matchingDomain: 'ds1.nl',
+      campaignId: 12345,
+      transactionId: 'LEGACY-0001'
+    };
+
+    let argUrl;
+
+    mock('sendPixel', function(url, successCallback) {
+      argUrl = url;
+      successCallback();
+    });
+
+    runCode(mockData);
+
+    assertApi('copyFromDataLayer').wasNotCalled();
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=LEGACY-0001&src=gtm-conversion%7C2.0.1');
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Standard tracking preserves empty string parameters
+  code: |-
+    const mockData = {
+      matchingDomain: 'ds1.nl',
+      campaignId: 12345,
+      transactionId: '',
+      currencyCode: '',
+      promotionCode: '',
+      descriptionAffiliate: '',
+      extra1: ''
+    };
+
+    let argUrl;
+
+    mock('sendPixel', function(url, successCallback) {
+      argUrl = url;
+      successCallback();
+    });
+
+    runCode(mockData);
+
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=&cur=&pr=&pn=&e1=&src=gtm-conversion%7C2.0.1');
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Product-level GA4 conversion
+  code: |-
+    const mockData = {
+      matchingDomain: 'ds1.nl',
+      campaignId: 12345,
+      trackingType: 'productLevelGa4',
+      commissionCode: 'Tag CC',
+      productCommissionCodeSource: 'tag'
+    };
+
+    let argUrl;
+
+    mock('copyFromDataLayer', function(key) {
+      const values = {
+        'ecommerce.transaction_id': 'ORDER GA4',
+        'ecommerce.currency': 'EUR',
+        'ecommerce.coupon': 'SAVE 10',
+        'ecommerce.items': [
+          {
+            item_id: 'SKU 1',
+            item_name: 'Blue Widget',
+            item_category: 'Fashion',
+            item_brand: 'Brand A',
+            price: 8,
+            quantity: 3
+          },
+          {
+            item_id: 'EXCLUDED',
+            price: 10,
+            daisycon_exclude: true
+          }
+        ]
+      };
+      return values[key];
+    });
+
+    mock('sendPixel', function(url, successCallback) {
+      argUrl = url;
+      successCallback();
+    });
+
+    runCode(mockData);
+
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER%20GA4&cur=EUR&pr=SAVE%2010&np=1&p[]={a:24.00}{r:24.00}{qty:3}{sku:SKU%201}{cc:Tag%20CC}{pn:Blue%20Widget}{iv:Brand%20A}&src=gtm-conversion%7C2.0.1');
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Product-level custom commission code property
+  code: |-
+    const mockData = {
+      matchingDomain: 'ds1.nl',
+      campaignId: 12345,
+      trackingType: 'productLevelGa4',
+      productCommissionCodeSource: 'custom',
+      productCommissionCodeProperty: 'item_brand'
+    };
+
+    let argUrl;
+
+    mock('copyFromDataLayer', function(key) {
+      const values = {
+        'ecommerce.transaction_id': 'ORDER-PROPERTY',
+        'ecommerce.items': [
+          {
+            item_id: 'SKU-1',
+            price: 10,
+            cc: 'Default A',
+            item_brand: 'Brand A'
+          },
+          {
+            item_id: 'SKU-2',
+            price: 20,
+            quantity: 2,
+            cc: 'Default B',
+            item_brand: 'Brand B'
+          }
+        ]
+      };
+      return values[key];
+    });
+
+    mock('sendPixel', function(url, successCallback) {
+      argUrl = url;
+      successCallback();
+    });
+
+    runCode(mockData);
+
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-PROPERTY&np=2&p[]={a:10.00}{r:10.00}{qty:1}{sku:SKU-1}{cc:Brand%20A}{iv:Brand%20A}&p[]={a:40.00}{r:40.00}{qty:2}{sku:SKU-2}{cc:Brand%20B}{iv:Brand%20B}&src=gtm-conversion%7C2.0.1');
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Product-level UA conversion
+  code: |-
+    const mockData = {
+      matchingDomain: 'ds1.nl',
+      campaignId: 12345,
+      trackingType: 'productLevelUa'
+    };
+
+    let argUrl;
+
+    mock('copyFromDataLayer', function(key) {
+      const values = {
+        'ecommerce.currencyCode': 'USD',
+        'ecommerce.purchase.actionField.id': 'ORDER-UA',
+        'ecommerce.purchase.actionField.coupon': 'UA10',
+        'ecommerce.purchase.products': [
+          {
+            id: 'UA-1',
+            name: 'UA Product',
+            category: 'Books',
+            price: 5.5,
+            quantity: 2
+          }
+        ]
+      };
+      return values[key];
+    });
+
+    mock('sendPixel', function(url, successCallback) {
+      argUrl = url;
+      successCallback();
+    });
+
+    runCode(mockData);
+
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-UA&cur=USD&pr=UA10&np=1&p[]={a:11.00}{r:11.00}{qty:2}{sku:UA-1}{cc:Books}{pn:UA%20Product}{iv:Books}&src=gtm-conversion%7C2.0.1');
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Product-level Daisycon array conversion
+  code: |-
+    const mockData = {
+      matchingDomain: 'ds1.nl',
+      campaignId: 12345,
+      trackingType: 'productLevelDaisyconArray',
+      transactionId: 'ORDER-ARRAY',
+      currencyCode: 'EUR',
+      promotionCode: 'ARRAY 10',
+      daisyconProductArray: [
+        {
+          a: 9.99,
+          r: 8.5,
+          qty: 1,
+          sku: 'D-1',
+          cc: 'Direct',
+          pn: 'Array Item',
+          iv: 'Internal',
+          e1: 'extra'
+        }
+      ]
+    };
+
+    let argUrl;
+
+    mock('sendPixel', function(url, successCallback) {
+      argUrl = url;
+      successCallback();
+    });
+
+    runCode(mockData);
+
+    assertApi('copyFromDataLayer').wasNotCalled();
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-ARRAY&cur=EUR&pr=ARRAY%2010&np=1&p[]={a:9.99}{r:8.50}{qty:1}{sku:D-1}{cc:Direct}{pn:Array%20Item}{iv:Internal}{e1:extra}&src=gtm-conversion%7C2.0.1');
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Product-level mode without valid products fails
+  code: |-
+    const mockData = {
+      matchingDomain: 'ds1.nl',
+      campaignId: 12345,
+      trackingType: 'productLevelGa4',
+      transactionId: 'ORDER-FAIL'
+    };
+
+    mock('copyFromDataLayer', function(key) {
+      return key === 'ecommerce.items' ? [] : undefined;
+    });
+
+    runCode(mockData);
+
+    assertApi('sendPixel').wasNotCalled();
+    assertApi('gtmOnFailure').wasCalled();
+- name: Product-level mode falls back to standard conversion
+  code: |-
+    const mockData = {
+      matchingDomain: 'ds1.nl',
+      campaignId: 12345,
+      trackingType: 'productLevelGa4',
+      productLevelFallbackBehavior: 'basket',
+      transactionId: 'ORDER-FALLBACK',
+      orderAmount: 14.99,
+      orderRevenue: 19.99,
+      currencyCode: 'EUR',
+      commissionCode: 'testCommission',
+      promotionCode: 'discount',
+      descriptionAffiliate: 'Test order (affiliate)',
+      descriptionAdvertiser: 'Test order (advertiser)'
+    };
+
+    let argUrl;
+
+    mock('copyFromDataLayer', function(key) {
+      return key === 'ecommerce.items' ? [] : undefined;
+    });
+
+    mock('sendPixel', function(url, successCallback) {
+      argUrl = url;
+      successCallback();
+    });
+
+    runCode(mockData);
+
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-FALLBACK&a=14.99&r=19.99&cur=EUR&cc=testCommission&pr=discount&pn=Test%20order%20(affiliate)&iv=Test%20order%20(advertiser)%20%7C%20Fallback%20mode%3A%20product%20level%20failed&src=gtm-conversion%7C2.0.1');
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Product-level mode without transaction ID fails
+  code: |-
+    const mockData = {
+      matchingDomain: 'ds1.nl',
+      campaignId: 12345,
+      trackingType: 'productLevelGa4'
+    };
+
+    mock('copyFromDataLayer', function(key) {
+      if (key === 'ecommerce.items') {
+        return [{item_id: 'SKU-1', price: 10}];
+      }
+      return undefined;
+    });
+
+    runCode(mockData);
+
+    assertApi('sendPixel').wasNotCalled();
+    assertApi('gtmOnFailure').wasCalled();
 ___NOTES___
 
-Created on 14/05/2020, 11:22:12
+Last updated: 21/08/2026
+Maintained by: Daisycon B.V.
 
+Key changes in this version:
+- Added product-level tracking for GA4 ecommerce data, UA Enhanced Ecommerce data and Daisycon product arrays.
+- Added various features to support edge cases with product-level tracking.
+- Refactored attribution logic.
+- Revised the form layout to improve usability.
 
+Original creation: 14/05/2020
+For support, please refer to Daisycon’s official documentation or contact Daisycon support.
