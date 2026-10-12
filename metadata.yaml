@@ -2,6 +2,8 @@ homepage: "https://www.daisycon.com"
 documentation: "https://faq-advertiser.daisycon.com/hc/en-us/articles/360019494034"
 versions:
   # Latest version
+  - sha: 18d27a90b56dd05046bdcb4af39074b491893e36
+    changeNotes: Default product-level fallback to standard conversion; add |pl source marker
   - sha: 908a08fb337a40d975a136801042f6df0d1e78e1
     changeNotes: Add product-level tracking
   - sha: 7c1287992c0ee0af6b8d375a15b2ace1aa4a50bf
