@@ -186,7 +186,7 @@ ___TEMPLATE_PARAMETERS___
       }
     ],
     "simpleValueType": true,
-    "defaultValue": "fail",
+    "defaultValue": "basket",
     "help": "Choose what happens when product-level tracking is selected but no valid products can be built. Standard conversion sends one transaction without product lines, using the available order-level and tag-level values.",
     "enablingConditions": [
       {
@@ -704,7 +704,7 @@ const buildStandardParameters = (orderValues) => {
     e3: data.extra3,
     e4: data.extra4,
     e5: data.extra5,
-    src: 'gtm-conversion|2.0.1'
+    src: 'gtm-conversion|2.0.2'
   };
 };
 
@@ -742,7 +742,7 @@ if (!isSet(data.campaignId) || !isSet(orderValues.transactionId)) {
 if (products.length === 0) {
   const fallbackBehavior = isSet(data.productLevelFallbackBehavior)
     ? data.productLevelFallbackBehavior
-    : 'fail';
+    : 'basket';
   if (fallbackBehavior !== 'basket') {
     log('Daisycon: Product-level tracking selected but no valid products were found. Request not sent.');
     data.gtmOnFailure();
@@ -770,7 +770,7 @@ const parts = [buildQueryString({
 for (let i = 0; i < products.length; i++) {
   parts.push(productToQueryString(products[i]));
 }
-parts.push('src=' + encodeUriComponent('gtm-conversion|2.0.1'));
+parts.push('src=' + encodeUriComponent('gtm-conversion|2.0.2|pl'));
 
 send(parts.join('&'));
 
@@ -879,7 +879,7 @@ scenarios:
     runCode(mockData);
 
     assertApi('sendPixel').wasCalled();
-    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-0001&a=14.99&r=19.99&cur=EUR&cc=testCommission&pr=discount%2010%25&pn=Test%20order%20(affiliate)&iv=Test%20order%20(advertiser)&e1=extra%201&e2=extra%202&e3=extra%203&e4=extra%204&e5=extra%205&src=gtm-conversion%7C2.0.1');
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-0001&a=14.99&r=19.99&cur=EUR&cc=testCommission&pr=discount%2010%25&pn=Test%20order%20(affiliate)&iv=Test%20order%20(advertiser)&e1=extra%201&e2=extra%202&e3=extra%203&e4=extra%204&e5=extra%205&src=gtm-conversion%7C2.0.2');
     assertApi('gtmOnSuccess').wasCalled();
 - name: Send Pixel Test (partial, failure)
   code: |-
@@ -900,7 +900,7 @@ scenarios:
     runCode(mockData);
 
     assertApi('sendPixel').wasCalled();
-    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-0001&a=14.99&src=gtm-conversion%7C2.0.1');
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-0001&a=14.99&src=gtm-conversion%7C2.0.2');
     assertApi('gtmOnFailure').wasCalled();
 - name: Legacy config defaults to standard tracking
   code: |-
@@ -920,7 +920,7 @@ scenarios:
     runCode(mockData);
 
     assertApi('copyFromDataLayer').wasNotCalled();
-    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=LEGACY-0001&src=gtm-conversion%7C2.0.1');
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=LEGACY-0001&src=gtm-conversion%7C2.0.2');
     assertApi('gtmOnSuccess').wasCalled();
 - name: Standard tracking preserves empty string parameters
   code: |-
@@ -943,7 +943,7 @@ scenarios:
 
     runCode(mockData);
 
-    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=&cur=&pr=&pn=&e1=&src=gtm-conversion%7C2.0.1');
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=&cur=&pr=&pn=&e1=&src=gtm-conversion%7C2.0.2');
     assertApi('gtmOnSuccess').wasCalled();
 - name: Product-level GA4 conversion
   code: |-
@@ -988,7 +988,7 @@ scenarios:
 
     runCode(mockData);
 
-    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER%20GA4&cur=EUR&pr=SAVE%2010&np=1&p[]={a:24.00}{r:24.00}{qty:3}{sku:SKU%201}{cc:Tag%20CC}{pn:Blue%20Widget}{iv:Brand%20A}&src=gtm-conversion%7C2.0.1');
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER%20GA4&cur=EUR&pr=SAVE%2010&np=1&p[]={a:24.00}{r:24.00}{qty:3}{sku:SKU%201}{cc:Tag%20CC}{pn:Blue%20Widget}{iv:Brand%20A}&src=gtm-conversion%7C2.0.2%7Cpl');
     assertApi('gtmOnSuccess').wasCalled();
 - name: Product-level custom commission code property
   code: |-
@@ -1031,7 +1031,7 @@ scenarios:
 
     runCode(mockData);
 
-    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-PROPERTY&np=2&p[]={a:10.00}{r:10.00}{qty:1}{sku:SKU-1}{cc:Brand%20A}{iv:Brand%20A}&p[]={a:40.00}{r:40.00}{qty:2}{sku:SKU-2}{cc:Brand%20B}{iv:Brand%20B}&src=gtm-conversion%7C2.0.1');
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-PROPERTY&np=2&p[]={a:10.00}{r:10.00}{qty:1}{sku:SKU-1}{cc:Brand%20A}{iv:Brand%20A}&p[]={a:40.00}{r:40.00}{qty:2}{sku:SKU-2}{cc:Brand%20B}{iv:Brand%20B}&src=gtm-conversion%7C2.0.2%7Cpl');
     assertApi('gtmOnSuccess').wasCalled();
 - name: Product-level UA conversion
   code: |-
@@ -1068,7 +1068,7 @@ scenarios:
 
     runCode(mockData);
 
-    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-UA&cur=USD&pr=UA10&np=1&p[]={a:11.00}{r:11.00}{qty:2}{sku:UA-1}{cc:Books}{pn:UA%20Product}{iv:Books}&src=gtm-conversion%7C2.0.1');
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-UA&cur=USD&pr=UA10&np=1&p[]={a:11.00}{r:11.00}{qty:2}{sku:UA-1}{cc:Books}{pn:UA%20Product}{iv:Books}&src=gtm-conversion%7C2.0.2%7Cpl');
     assertApi('gtmOnSuccess').wasCalled();
 - name: Product-level Daisycon array conversion
   code: |-
@@ -1103,14 +1103,15 @@ scenarios:
     runCode(mockData);
 
     assertApi('copyFromDataLayer').wasNotCalled();
-    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-ARRAY&cur=EUR&pr=ARRAY%2010&np=1&p[]={a:9.99}{r:8.50}{qty:1}{sku:D-1}{cc:Direct}{pn:Array%20Item}{iv:Internal}{e1:extra}&src=gtm-conversion%7C2.0.1');
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-ARRAY&cur=EUR&pr=ARRAY%2010&np=1&p[]={a:9.99}{r:8.50}{qty:1}{sku:D-1}{cc:Direct}{pn:Array%20Item}{iv:Internal}{e1:extra}&src=gtm-conversion%7C2.0.2%7Cpl');
     assertApi('gtmOnSuccess').wasCalled();
-- name: Product-level mode without valid products fails
+- name: Product-level mode without valid products can fail
   code: |-
     const mockData = {
       matchingDomain: 'ds1.nl',
       campaignId: 12345,
       trackingType: 'productLevelGa4',
+      productLevelFallbackBehavior: 'fail',
       transactionId: 'ORDER-FAIL'
     };
 
@@ -1122,13 +1123,12 @@ scenarios:
 
     assertApi('sendPixel').wasNotCalled();
     assertApi('gtmOnFailure').wasCalled();
-- name: Product-level mode falls back to standard conversion
+- name: Product-level mode falls back to standard conversion by default
   code: |-
     const mockData = {
       matchingDomain: 'ds1.nl',
       campaignId: 12345,
       trackingType: 'productLevelGa4',
-      productLevelFallbackBehavior: 'basket',
       transactionId: 'ORDER-FALLBACK',
       orderAmount: 14.99,
       orderRevenue: 19.99,
@@ -1152,7 +1152,7 @@ scenarios:
 
     runCode(mockData);
 
-    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-FALLBACK&a=14.99&r=19.99&cur=EUR&cc=testCommission&pr=discount&pn=Test%20order%20(affiliate)&iv=Test%20order%20(advertiser)%20%7C%20Fallback%20mode%3A%20product%20level%20failed&src=gtm-conversion%7C2.0.1');
+    assertThat(argUrl).isStrictlyEqualTo('https://ds1.nl/t/?ci=12345&ti=ORDER-FALLBACK&a=14.99&r=19.99&cur=EUR&cc=testCommission&pr=discount&pn=Test%20order%20(affiliate)&iv=Test%20order%20(advertiser)%20%7C%20Fallback%20mode%3A%20product%20level%20failed&src=gtm-conversion%7C2.0.2');
     assertApi('gtmOnSuccess').wasCalled();
 - name: Product-level mode without transaction ID fails
   code: |-
